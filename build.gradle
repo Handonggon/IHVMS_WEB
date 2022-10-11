@@ -2,10 +2,11 @@ plugins {
 	id 'org.springframework.boot' version '2.7.4'
 	id 'io.spring.dependency-management' version '1.0.14.RELEASE'
 	id 'java'
+	id 'war'
 }
 
 group = 'kr.or.i815'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '11'
 
 configurations {
@@ -20,12 +21,62 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-configuration-processor'
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
+	implementation 'org.javassist:javassist'
+
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	
+
+
+	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client' // MariaDB
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+war {
+	def activeProfile = 'local'
+
+	if(project.hasProperty('profile')) {
+		activeProfile = profile
+	}
+
+	processResources {
+		exclude('application.yml', 'application-*.yml')
+	}
+
+	into('WEB-INF/classes') {
+		from "src/main/resources/application-${activeProfile}.yml"
+	}
+
+	rename "application-${activeProfile}.yml", "application.yml"
+
+	archiveFileName = "ROOT.war"
+}
+
+bootWar {
+	def activeProfile = 'local'
+
+	if(project.hasProperty('profile')) {
+		activeProfile = profile
+	}
+
+	processResources {
+		exclude('application.yml', 'application-*.yml')
+	}
+
+	into('WEB-INF/classes') {
+		from "src/main/resources/application-${activeProfile}.yml"
+	}
+
+	rename "application-${activeProfile}.yml", "application.yml"
+
+	archiveFileName = "ROOT.war"
 }

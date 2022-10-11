@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+
+        <!--link rel="stylesheet" href="style.css" type="text/css"-->
+        <title>IHVMS</title>
+	</head>
+	<body>
+		<div>CommonCode</div>
+        <table>
+            <thead>
+                <tr>
+                <th>MAIN CODE</th>
+                <th>SUB CODE</th>
+                <th>NAME</th>
+                <th>DESC</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="commonCode : ${commonCodeList}">
+                  <td th:text="${commonCode.mainCode}">BNO</td>
+                  <td th:text="${commonCode.subCode}">WRITER</td>
+                  <td th:text="${commonCode.name}">WRITER</td>
+                  <td th:text="${commonCode.desc}">WRITER</td>
+                </tr>
+            </tbody>
+        </table>
+	</body>
+</html>
